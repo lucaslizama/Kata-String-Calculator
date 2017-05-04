@@ -1,3 +1,5 @@
+const sumarNumerosCadena = require("../src/functions").sumarNumerosCadena;
+
 QUnit.test("Cadena vacia retorna 0", function(assert) {
     assert.equal(sumarNumerosCadena(""), 0, "Una cadena vacia debe retornar 0");
 });

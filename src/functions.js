@@ -1,24 +1,58 @@
-function sumarNumerosCadena(cadena) {
-    if(cadena.length === 0) //Cadena vacia, retorno 0
-        return 0;
+var exports = module.exports = {};
 
-    if(!isNaN(Number(cadena))) //Cadena contiene un numero, retorno el numero
-        return Number(cadena);
+exports.sumarNumerosCadena = (cadena) => {
+
+    if(validarCadenaNula(cadena)) return 0;
+
+    if(validarCadenaVacia(cadena)) return 0;
+
+    if(esNumerico(cadena)) return Number(cadena); //Retorno el numero
 
     var separadores = [",","\n"];
 
     if(cadena.indexOf("//") === 0) {
-        separadores.push(cadena[2]);
-        cadena = cadena.replace(cadena.slice(0,3),"");
+        separadores = agregarSeparador(separadores,cadena);
+        cadena = quitarSeparadorCadena(cadena);
     }
 
-    if(cadena.indexOf(separadores[0]) > 0 || cadena.indexOf(separadores[1]) > 0 || cadena.indexOf(separadores[2]) > 0) {
-        var reg = new RegExp("[,\n" + separadores[2] + "]");
-        var numeros = cadena.split(reg);
-        var resultado = 0;
-        for(var i = 0; i < numeros.length; i++) {
-            resultado += Number(numeros[i]);
-        }
-        return resultado;
+    if(existeSeparador(cadena,separadores)) {
+        var numeros = obtenerNumeros(cadena,separadores);
+        return calcularResultado(numeros);
     }
+};
+
+const validarCadenaNula = (cadena) => { return cadena === null; };
+
+const validarCadenaVacia = (cadena) => { return cadena.length === 0; };
+
+const esNumerico = (cadena) => { return !isNaN(cadena); };
+
+const agregarSeparador = (separadores, cadena) => { 
+    separadores.push(cadena[2]); 
+    return separadores;
+};
+
+const quitarSeparadorCadena = (cadena) => { 
+    return cadena.replace(cadena.slice(0,3),""); 
+};
+
+const existeSeparador = (cadena, separadores) => { 
+    for(var i = 0; i < separadores.length; i++) {
+        if(cadena.indexOf(separadores[i]) > 0) return true;
+    }
+    return false;
+};
+
+const obtenerNumeros = (cadena, separadores) => {
+    var reg = new RegExp("[,\n" + separadores[2] + "]");
+    var numeros = cadena.split(reg);
+    return numeros;
+}
+
+const calcularResultado = (numeros) => {
+    var resultado = 0;
+    for(var i = 0; i < numeros.length; i++) {
+        resultado += Number(numeros[i]);
+    }
+    return resultado;
 }
